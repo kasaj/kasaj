@@ -16,13 +16,13 @@ Function Compare-ObjectProperties {
                 RefValue = ($diff | ? {$_.SideIndicator -eq '<='} | % $($objprop))
                 DiffValue = ($diff | ? {$_.SideIndicator -eq '=>'} | % $($objprop))
                 EqualValue = ($diff | ? {$_.SideIndicator -eq '=='} | % $($objprop))
-                Equal = if($diff.SideIndicator -eq '=='){$true}else{$false}
+                PropertyEqual = if($diff.SideIndicator -eq '=='){$true}else{$false}
             }
             $diffs += New-Object PSObject -Property $diffprops
         }        
     }
     if ($diffs) {
-        return ($diffs | Select PropertyName,EqualValue,RefValue,DiffValue,Equal)
+        return ($diffs | Select PropertyName,PropertyEqual,EqualValue,RefValue,DiffValue)
     }     
 }
 
@@ -44,12 +44,12 @@ $Obj2 = [PSCustomObject] @{
 
 Compare-ObjectProperties $Obj1 $Obj2 | ft
 
-PropertyName EqualValue RefValue DiffValue Equal
------------- ---------- -------- --------- -----
-Id           Test                           True
-Info                                        True
-No                      False              False
-Value                   1        2         False
-Yes                              True      False
+PropertyName PropertyEqual EqualValue RefValue DiffValue
+------------ ------------- ---------- -------- ---------
+Id                    True Test
+Info                  True
+No                   False            False
+Value                False            1        2
+Yes                  False                     True
 
 #>
