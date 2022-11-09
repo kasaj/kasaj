@@ -5,7 +5,7 @@ Function Transpose-Object ($Objects, $Delimiter){
         foreach($Prop in $Props){
             $ReportLine = [PSCustomObject] @{
                 PropertyName = $Prop
-                Value = $Object.$Prop -join ($Delimiter)
+                PropertyValue = $Object.$Prop -join ($Delimiter)
             }
             $Report.Add($ReportLine)
         }
@@ -22,16 +22,16 @@ DisplayName                  Members
 Test Group 1                 {GradyA, ChristieC, AlexW}
 Test Group 2                 {AlexW}
 
-Convert-ObjectTransposed (Get-Group "test *"|select DisplayName,Members ) (", ")
+Transpose-Object (Get-Group "test *"|select DisplayName,Members ) (", ")
 
-PropertyName Value
------------- -----
+PropertyName PropertyValue
+------------ -------------
 DisplayName  Test Group 1
 Members      GradyA, ChristieC, AlexW
 DisplayName  Test Group 2
 Members      AlexW
 
-Convert-ObjectTransposed (Get-Group "test *"|select DisplayName,Members ) (", ") | Export-Csv -Path "Test" -Delimiter "`t" -NoTypeInformation -Encoding unicode
+Transpose-Object (Get-Group "test *"|select DisplayName,Members ) (", ") | Export-Csv -Path "Test" -Delimiter "`t" -NoTypeInformation -Encoding unicode
 
 #>
 
