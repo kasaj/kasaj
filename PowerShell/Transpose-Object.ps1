@@ -19,8 +19,8 @@ Get-Group "test *"|select DisplayName,Members
 
 DisplayName                  Members
 -----------                  -------
-Test group 1                 {GradyA, ChristieC, AlexW}
-Test group 2                 {AlexW}
+Test Group 1                 {GradyA, ChristieC, AlexW}
+Test Group 2                 {AlexW}
 
 Convert-ObjectTransposed (Get-Group "test *"|select DisplayName,Members ) (", ")
 

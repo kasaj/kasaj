@@ -13,22 +13,20 @@ function Convert-MultivaluedProperties ($Objects,$Delimeter){
 
 <# EXAMPLE
 
-get-mailbox 1*|select Name,EmailAddresses
+Get-Group "test *"|select DisplayName,Members 
 
-$Obj = [PSCustomObject] @{
-    Identity = "Test"
-    Values = "1","2","3"
-    Info = "" 
-}
+DisplayName                  Members
+-----------                  -------
+Test Group 1                 {GradyA, ChristieC, AlexW}
+Test Group 2                 {AlexW}
 
-Report = Convert-MultivaluedProperties $Obj ", "
+Convert-MultivaluedProperties (Get-Group "test *"|select DisplayName,Members ) (", ")
 
-$Report 
+DisplayName                  Members
+-----------                  -------
+Test Group 1                 GradyA, ChristieC, AlexW
+Test Group 2                 AlexW
 
-Identity Info Values
--------- ---- ------
-Test          1, 2, 3
-
-$Report | Export-Csv -Path "Test" -Delimiter "`t" -NoTypeInformation -Encoding unicode
+Convert-ObjectTransposed (Get-Group "test *"|select DisplayName,Members ) (", ") | Export-Csv -Path "Test" -Delimiter "`t" -NoTypeInformation -Encoding unicode
 
 #>
