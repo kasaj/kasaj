@@ -1,17 +1,19 @@
-function Convert-MultivaluedProperties ($In,$Delimeter){
-    $Out = @()
-    $Props = $In|Get-Member -MemberType property,NoteProperty|%{$_.name}
-    foreach($i in $In){
+function Convert-MultivaluedProperties ($Objects,$Delimeter){
+    $Report = @()
+    $Props = $Objects|Get-Member -MemberType property,NoteProperty|%{$_.name}
+    foreach($Object in $Objects){
         $Obj = "" | select $Props
         foreach($Prop in $Props){
-            $Obj.$Prop = $i.$Prop -join ($Delimeter)
+            $Obj.$Prop = $Object.$Prop -join ($Delimeter)
         }
-        $Out+=$Obj
+        $Report += $Obj
     }
-    $Out
+    $Report
 }
 
 <# EXAMPLE
+
+get-mailbox 1*|select Name,EmailAddresses
 
 $Obj = [PSCustomObject] @{
     Identity = "Test"

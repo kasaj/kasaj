@@ -15,20 +15,23 @@ function Transpose-Object ($Objects, $Delimiter){
 
 <# EXAMPLE
 
-get-mailbox 11|select Name,EmailAddresses
+Get-Group "test *"|select DisplayName,Members 
 
-Name EmailAddresses
----- --------------
-11   {SIP:11@fikas.eu, SMTP:11@fikas.eu}
+DisplayName                  Members
+-----------                  -------
+Test group 1                 {GradyA, ChristieC, AlexW}
+Test group 2                 {AlexW}
 
-Convert-ObjectTransposed (get-mailbox 11|select Name,EmailAddresses) (", ")
+Convert-ObjectTransposed (Get-Group "test *"|select DisplayName,Members ) (", ")
 
-PropertyName   Value
-------------   -----
-EmailAddresses SIP:11@fikas.eu, SMTP:11@fikas.eu
-Name           11
+PropertyName Value
+------------ -----
+DisplayName  Test Group 1
+Members      GradyA, ChristieC, AlexW
+DisplayName  Test Group 2
+Members      AlexW
 
-Convert-ObjectTransposed (get-mailbox 11|select Name,EmailAddresses) (", ") | Export-Csv -Path "Test" -Delimiter "`t" -NoTypeInformation -Encoding unicode
+Convert-ObjectTransposed (Get-Group "test *"|select DisplayName,Members ) (", ") | Export-Csv -Path "Test" -Delimiter "`t" -NoTypeInformation -Encoding unicode
 
 #>
 
