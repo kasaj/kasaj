@@ -24,3 +24,28 @@ Function Compare-ObjectProperties {
         return ($diffs | Select PropertyName,ValueEqual,RefValue,DiffValue)
     }     
 }
+
+<# EXAMPLE
+
+$Obj1 = [PSCustomObject] @{
+    Identity = "Test"
+    Values = 1
+    Info = "" 
+}
+
+$Obj2 = [PSCustomObject] @{
+    Identity = "Test"
+    Info = "" 
+    IsDefault = $true
+}
+
+Compare-ObjectProperties $Obj1 $Obj2
+
+PropertyName ValueEqual RefValue DiffValue
+------------ ---------- -------- ---------
+Identity     Test
+Info
+IsDefault                        True
+Values                  1
+
+#>
