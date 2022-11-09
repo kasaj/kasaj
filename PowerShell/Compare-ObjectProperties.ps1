@@ -28,21 +28,21 @@ Function Compare-ObjectProperties {
 
 <# EXAMPLE
 
-$Obj1 = [PSCustomObject] @{
-    Id = "Test"
-    Value = 1
-    Info = ""
-    No = $false
-}
+PS C:\> $Obj1 = [PSCustomObject] @{
+        Id = "Test"
+        Value = 1
+        Info = ""
+        No = $false
+        }
 
-$Obj2 = [PSCustomObject] @{
-    Id = "Test"
-    Value = 2
-    Info = "" 
-    Yes = $true
-}
+PS C:\> $Obj2 = [PSCustomObject] @{
+        Id = "Test"
+        Value = 2
+        Info = "" 
+        Yes = $true
+        }
 
-Compare-ObjectProperties $Obj1 $Obj2 | ft
+PS C:\> Compare-ObjectProperties $Obj1 $Obj2 | ft
 
 PropertyName PropertyEqual EqualValue RefValue DiffValue
 ------------ ------------- ---------- -------- ---------

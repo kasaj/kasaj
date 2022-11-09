@@ -13,20 +13,20 @@ Function Convert-MultivaluedProperties ($Objects,$Delimeter){
 
 <# EXAMPLE
 
-Get-Group "test *"|select DisplayName,Members 
+PS C:\> Get-Group "test *"|select DisplayName,Members 
 
 DisplayName                  Members
 -----------                  -------
 Test Group 1                 {GradyA, ChristieC, AlexW}
 Test Group 2                 {AlexW}
 
-Convert-MultivaluedProperties (Get-Group "test *"|select DisplayName,Members ) (", ")
+PS C:\> Convert-MultivaluedProperties (Get-Group "test *"|select DisplayName,Members ) (", ")
 
 DisplayName                  Members
 -----------                  -------
 Test Group 1                 GradyA, ChristieC, AlexW
 Test Group 2                 AlexW
 
-Convert-ObjectTransposed (Get-Group "test *"|select DisplayName,Members ) (", ") | Export-Csv -Path "Test" -Delimiter "`t" -NoTypeInformation -Encoding unicode
+PS C:\> Convert-ObjectTransposed (Get-Group "test *"|select DisplayName,Members ) (", ") | Export-Csv -Path "Test" -Delimiter "`t" -NoTypeInformation -Encoding unicode
 
 #>

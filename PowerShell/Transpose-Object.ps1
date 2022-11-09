@@ -15,14 +15,14 @@ Function Transpose-Object ($Objects, $Delimiter){
 
 <# EXAMPLE
 
-Get-Group "test *"|select DisplayName,Members 
+PS C:\> Get-Group "test *"|select DisplayName,Members 
 
 DisplayName                  Members
 -----------                  -------
 Test Group 1                 {GradyA, ChristieC, AlexW}
 Test Group 2                 {AlexW}
 
-Transpose-Object (Get-Group "test *"|select DisplayName,Members ) (", ")
+PS C:\> Transpose-Object (Get-Group "test *"|select DisplayName,Members ) (", ")
 
 PropertyName PropertyValue
 ------------ -------------
@@ -31,7 +31,29 @@ Members      GradyA, ChristieC, AlexW
 DisplayName  Test Group 2
 Members      AlexW
 
-Transpose-Object (Get-Group "test *"|select DisplayName,Members ) (", ") | Export-Csv -Path "Test" -Delimiter "`t" -NoTypeInformation -Encoding unicode
+PS C:\> Transpose-Object (Get-Group "test *"|select DisplayName,Members ) (", ") | Export-Csv -Path "Test" -Delimiter "`t" -NoTypeInformation -Encoding unicode
+
+PS C:\> Get-OrganizationConfig|select *app*
+
+AppsForOfficeEnabled               : True
+AppsForOfficeCorpCatalogAppsCount  : 0
+PrivateCatalogAppsCount            : 0
+EwsApplicationAccessPolicy         : 
+BookingsMembershipApprovalRequired : False
+MobileAppEducationEnabled          : True
+BasicAuthBlockedApps               : None
+
+PS C:\> Transpose-Object (Get-OrganizationConfig|select *app*)
+
+PropertyName                       PropertyValue
+------------                       -------------
+AppsForOfficeCorpCatalogAppsCount  0
+AppsForOfficeEnabled               True
+BasicAuthBlockedApps               None
+BookingsMembershipApprovalRequired False
+EwsApplicationAccessPolicy
+MobileAppEducationEnabled          True
+PrivateCatalogAppsCount            0
 
 #>
 
