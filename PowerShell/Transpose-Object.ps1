@@ -1,4 +1,4 @@
-function Transpose-Object ($Objects, $Delimiter){
+Function Transpose-Object ($Objects, $Delimiter){
     $Props = $Objects | Get-Member -MemberType Property,NoteProperty|%{$_.name}
     $Report = [System.Collections.Generic.List[Object]]::new()
     foreach($Object in $Objects){

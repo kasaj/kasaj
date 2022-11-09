@@ -1,4 +1,4 @@
-function Convert-MultivaluedProperties ($Objects,$Delimeter){
+Function Convert-MultivaluedProperties ($Objects,$Delimeter){
     $Report = @()
     $Props = $Objects|Get-Member -MemberType property,NoteProperty|%{$_.name}
     foreach($Object in $Objects){

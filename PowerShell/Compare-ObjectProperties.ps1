@@ -15,37 +15,41 @@ Function Compare-ObjectProperties {
                 PropertyName=$objprop
                 RefValue = ($diff | ? {$_.SideIndicator -eq '<='} | % $($objprop))
                 DiffValue = ($diff | ? {$_.SideIndicator -eq '=>'} | % $($objprop))
-                ValueEqual = ($diff | ? {$_.SideIndicator -eq '=='} | % $($objprop))
+                EqualValue = ($diff | ? {$_.SideIndicator -eq '=='} | % $($objprop))
+                Equal = if($diff.SideIndicator -eq '=='){$true}else{$false}
             }
             $diffs += New-Object PSObject -Property $diffprops
         }        
     }
     if ($diffs) {
-        return ($diffs | Select PropertyName,ValueEqual,RefValue,DiffValue)
+        return ($diffs | Select PropertyName,EqualValue,RefValue,DiffValue,Equal)
     }     
 }
 
 <# EXAMPLE
 
 $Obj1 = [PSCustomObject] @{
-    Identity = "Test"
-    Values = 1
-    Info = "" 
+    Id = "Test"
+    Value = 1
+    Info = ""
+    No = $false
 }
 
 $Obj2 = [PSCustomObject] @{
-    Identity = "Test"
+    Id = "Test"
+    Value = 2
     Info = "" 
-    IsDefault = $true
+    Yes = $true
 }
 
-Compare-ObjectProperties $Obj1 $Obj2
+Compare-ObjectProperties $Obj1 $Obj2 | ft
 
-PropertyName ValueEqual RefValue DiffValue
------------- ---------- -------- ---------
-Identity     Test
-Info
-IsDefault                        True
-Values                  1
+PropertyName EqualValue RefValue DiffValue Equal
+------------ ---------- -------- --------- -----
+Id           Test                           True
+Info                                        True
+No                      False              False
+Value                   1        2         False
+Yes                              True      False
 
 #>
