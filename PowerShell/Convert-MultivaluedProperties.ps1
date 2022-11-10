@@ -1,15 +1,28 @@
-Function Convert-MultivaluedProperties ($Objects,$Delimeter){
-    $Report = @()
-    $Props = $Objects|Get-Member -MemberType property,NoteProperty|%{$_.name}
-    foreach($Object in $Objects){
-        $Obj = "" | select $Props
-        foreach($Prop in $Props){
-            $Obj.$Prop = $Object.$Prop -join ($Delimeter)
-        }
-        $Report += $Obj
+Function Convert-MultivaluedProperties{
+    [CmdletBinding()]
+    Param(
+        [Parameter(ValueFromPipeline)] 
+        [PsObject]$Object,
+        [string] $Delimiter
+    )
+    Begin{
+        $Out = @()
     }
-    $Report
+    Process{
+        $Props = $Object|Get-Member -MemberType property,NoteProperty|%{$_.name}
+        foreach($Obj in $Object){
+            $Line = "" | select $Props
+            foreach($Prop in $Props){
+                $Line.$Prop = $Obj.$Prop -join ($Delimiter)
+            }
+            $Out += $Line
+        }
+    }
+    End{
+        $Out
+    }
 }
+
 
 <# EXAMPLE
 
@@ -20,13 +33,13 @@ DisplayName                  Members
 Test Group 1                 {GradyA, ChristieC, AlexW}
 Test Group 2                 {AlexW}
 
-PS C:\> Convert-MultivaluedProperties (Get-Group "test *"|select DisplayName,Members ) (", ")
+PS C:\> Get-Group "test *"|select DisplayName,Members | Convert-MultivaluedProperties -Delimiter (", ")
 
 DisplayName                  Members
 -----------                  -------
 Test Group 1                 GradyA, ChristieC, AlexW
 Test Group 2                 AlexW
 
-PS C:\> Convert-ObjectTransposed (Get-Group "test *"|select DisplayName,Members ) (", ") | Export-Csv -Path "Test" -Delimiter "`t" -NoTypeInformation -Encoding unicode
+PS C:\> Get-Group "test *"|select DisplayName,Members | Convert-MultivaluedProperties -Delimiter (", ") | Export-Csv -Path "Test" -Delimiter "`t" -NoTypeInformation -Encoding unicode
 
 #>
