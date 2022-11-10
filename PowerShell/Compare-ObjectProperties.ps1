@@ -1,7 +1,8 @@
 Function Compare-ObjectProperties {
     Param(
         [PSObject]$ReferenceObject,
-        [PSObject]$DifferenceObject 
+        [PSObject] $DifferenceObject,
+        [switch] $IncludeEqual
     )
     $objprops = @()
     $objprops += $ReferenceObject | Get-Member -MemberType Property,NoteProperty | % Name
@@ -9,20 +10,35 @@ Function Compare-ObjectProperties {
     $objprops = $objprops | Sort | Select -Unique
     $diffs = @()
     foreach ($objprop in $objprops) {
-        $diff = Compare-Object $ReferenceObject $DifferenceObject -Property $objprop -IncludeEqual
-        if ($diff) {            
-            $diffprops = @{
-                PropertyName=$objprop
-                RefValue = ($diff | ? {$_.SideIndicator -eq '<='} | % $($objprop))
-                DiffValue = ($diff | ? {$_.SideIndicator -eq '=>'} | % $($objprop))
-                EqualValue = ($diff | ? {$_.SideIndicator -eq '=='} | % $($objprop))
-                PropertyEqual = if($diff.SideIndicator -eq '=='){$true}else{$false}
+        if($IncludeEqual){
+            $diff = Compare-Object $ReferenceObject $DifferenceObject -Property $objprop -IncludeEqual
+            if ($diff) {            
+                $diffprops = @{
+                    PropertyName=$objprop
+                    RefValue = ($diff | ? {$_.SideIndicator -eq '<='} | % $($objprop))
+                    DiffValue = ($diff | ? {$_.SideIndicator -eq '=>'} | % $($objprop))
+                    EqualValue = ($diff | ? {$_.SideIndicator -eq '=='} | % $($objprop))
+                    PropertyEqual = if($diff.SideIndicator -eq '=='){$true}else{$false}
+                }
+                $diffs += New-Object PSObject -Property $diffprops
             }
-            $diffs += New-Object PSObject -Property $diffprops
-        }        
+        }else{
+            $diff = Compare-Object $ReferenceObject $DifferenceObject -Property $objprop
+            if ($diff) {            
+                $diffprops = @{
+                    PropertyName=$objprop
+                    RefValue = ($diff | ? {$_.SideIndicator -eq '<='} | % $($objprop))
+                    DiffValue = ($diff | ? {$_.SideIndicator -eq '=>'} | % $($objprop))
+                }
+                $diffs += New-Object PSObject -Property $diffprops
+            }
+        }
+                
     }
-    if ($diffs) {
+    if ($diffs -and $IncludeEqual) {
         return ($diffs | Select PropertyName,PropertyEqual,EqualValue,RefValue,DiffValue)
+    }else{
+        return ($diffs | Select PropertyName,RefValue,DiffValue)
     }     
 }
 
@@ -43,6 +59,14 @@ PS C:\> $Obj2 = [PSCustomObject] @{
         }
 
 PS C:\> Compare-ObjectProperties $Obj1 $Obj2 | ft
+
+PropertyName RefValue DiffValue
+------------ -------- ---------
+No              False
+Value               1 2
+Yes                   True
+
+PS C:\> Compare-ObjectProperties $Obj1 $Obj2 -IncludeEqual| ft
 
 PropertyName PropertyEqual EqualValue RefValue DiffValue
 ------------ ------------- ---------- -------- ---------
