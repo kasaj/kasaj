@@ -26,20 +26,20 @@ Function Convert-MultivaluedProperties{
 
 <# EXAMPLE
 
-PS C:\> Get-Group "test *"|select DisplayName,Members 
+PS C:\> Get-Group "test *" | select DisplayName,Members 
 
 DisplayName                  Members
 -----------                  -------
 Test Group 1                 {GradyA, ChristieC, AlexW}
 Test Group 2                 {AlexW}
 
-PS C:\> Get-Group "test *"|select DisplayName,Members | Convert-MultivaluedProperties -Delimiter (", ")
+PS C:\> Get-Group "test *" | select DisplayName,Members | Convert-MultivaluedProperties -Delimiter (", ")
 
 DisplayName                  Members
 -----------                  -------
 Test Group 1                 GradyA, ChristieC, AlexW
 Test Group 2                 AlexW
 
-PS C:\> Get-Group "test *"|select DisplayName,Members | Convert-MultivaluedProperties -Delimiter (", ") | Export-Csv -Path "Test" -Delimiter "`t" -NoTypeInformation -Encoding unicode
+PS C:\> Get-Group "test *" | select DisplayName,Members | Convert-MultivaluedProperties -Delimiter (", ") | Export-Csv -Path "Test" -Delimiter "`t" -NoTypeInformation -Encoding unicode
 
 #>

@@ -66,7 +66,7 @@ No              False
 Value               1 2
 Yes                   True
 
-PS C:\> Compare-ObjectProperties $Obj1 $Obj2 -IncludeEqual| ft
+PS C:\> Compare-ObjectProperties $Obj1 $Obj2 -IncludeEqual | ft
 
 PropertyName PropertyAndValueEqual EqualValue RefValue DiffValue
 ------------ --------------------- ---------- -------- ---------
