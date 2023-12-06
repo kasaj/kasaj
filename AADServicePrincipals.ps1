@@ -104,7 +104,7 @@ $Sps|select Info,DisplayName,ServicePrincipalType,AppId,ObjectId,Homepage,Logout
 Write-host "ExportToJson $csvExportFilePath"
 $Sps|ConvertTo-Json -Depth 10 > $jsonExportFilePath
 
-# COMMENTS
+# NOTES
 <# 
 Get-AzureADApplication
 Get-AzureADApplicationExtensionProperty
@@ -145,6 +145,23 @@ https://learn.microsoft.com/en-us/powershell/microsoftgraph/installation?view=gr
 Connect-MgGraph -Scopes Application.Read.All,AuditLog.Read.All,Directory.Read.All
 $Aps = Get-MgApplication -All
 $Sps =  Get-MgServicePrincipal -All
+
+List all application role assignments for all service principals in your directory
+https://learn.microsoft.com/en-us/powershell/azure/active-directory/list-service-principal-application-roles?view=azureadps-2.0
+# Get all service principals, and for each one, get all the app role assignments, 
+# resolving the app role ID to it's display name. 
+Get-AzureADServicePrincipal | % {
+
+  # Build a hash table of the service principal's app roles. The 0-Guid is
+  # used in an app role assignment to indicate that the principal is assigned
+  # to the default app role (or rather, no app role).
+  $appRoles = @{ "$([Guid]::Empty.ToString())" = "(default)" }
+  $_.AppRoles | % { $appRoles[$_.Id] = $_.DisplayName }
+
+  # Get the app role assignments for this app, and add a field for the app role name
+  Get-AzureADServiceAppRoleAssignment -ObjectId ($_.ObjectId) | Select ResourceDisplayName, PrincipalDisplayName,  Id | % {  $_ | Add-Member "AppRoleDisplayName" $appRoles[$_.Id] -Passthru
+  }
+}
 
 https://github.com/microsoft/AzureADToolkit/tree/main
 Get-AzureADPSPermissions.ps1 - https://gist.github.com/psignoret/41793f8c6211d2df5051d77ca3728c09
