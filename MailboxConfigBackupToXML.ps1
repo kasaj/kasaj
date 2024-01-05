@@ -9,7 +9,7 @@ $Cmdlets = "Get-ADUser","Get-EOMailbox","Get-CASMailbox","Get-EOCalendarProcessi
 
 $RemoteMailboxes = Get-RemoteMailbox -ResultSize Unlimited
 
-foreach($RemoteMailbox in $RemoteMailboxes[10]) {    
+foreach($RemoteMailbox in $RemoteMailboxes) {    
     $Mailbox = [PSCustomObject]@{
         DisplayName = $RemoteMailbox.DisplayName
         PrimarySmtpAddress = $RemoteMailbox.PrimarySmtpAddress.tostring()
