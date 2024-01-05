@@ -1,11 +1,11 @@
-# The script is intended to export Exchange Onprem as well as Online mailbox properties (more $Cmdlets) as XML file per mailbox to $OutputFolder.
+# The script is intended to export Onprem as well as Online mailbox properties (more $Cmdlets) as XML file per mailbox to $OutputFolder.
 # Exchange Onprem Management Shell runspace expected
 
 Connect-ExchangeOnline -Prefix EO
 
 $OutputFolder = "C:\Temp\MailboxConfigBackup"
 
-$Cmdlets = "Get-ADUser","Get-EOMailbox","Get-CASMailbox","Get-EOCalendarProcessing","Get-EOMailboxPermission","Get-EORecipientPermission","Get-EOMailboxRegionalConfiguration"
+$Cmdlets = "Get-ADUser","Get-EOMailbox","Get-EOCASMailbox","Get-EOCalendarProcessing","Get-EOMailboxPermission","Get-EORecipientPermission","Get-EOMailboxRegionalConfiguration"
 
 $RemoteMailboxes = Get-RemoteMailbox -ResultSize Unlimited
 
