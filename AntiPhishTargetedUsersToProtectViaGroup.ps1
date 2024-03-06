@@ -42,7 +42,7 @@ Order and precedence of email protection: https://learn.microsoft.com/en-us/micr
 #>
 
 Param(
-    [Parameter(Mandatory=$true, ParameterSetName='ByName')] [ValidateNotNullOrEmpty()] [string] $GroupIdentity,
+    [Parameter(Mandatory=$true)] [ValidateNotNullOrEmpty()] [string] $GroupIdentity,
     [Parameter(Mandatory=$true)] [ValidateNotNullOrEmpty()] [string] $AntiPhishingPolicyIdentity,
     [Parameter(Mandatory=$true)] [ValidateSet("Test", "Set")] [string] $Action
 )
