@@ -76,7 +76,7 @@ if($GroupMembers){
     write-host "Group member count: " ($GroupMembers|measure).count 
     foreach($GroupMember in $GroupMembers){
         foreach($Email in $GroupMember.EmailAddresses){
-            if($Email -like "smtp:*"){
+            if($Email -like "smtp:*" -and $Email -notlike "*.onmicrosoft.com"){
                 [string[]]$UsersToProtect += $($GroupMember.displayname+";"+$($Email -replace("smtp:")))
             }
         }
@@ -91,12 +91,13 @@ if($UsersToProtect){
 }else{
     return "No UsersToProtect composion."
 }
-
+<#
 if($AntiPhishPolicy.TargetedUsersToProtect){
     write-host "Current UsersToProtect count: " ($AntiPhishPolicy.TargetedUsersToProtect|measure).count 
     [string[]]$UsersToProtect += $AntiPhishPolicy.TargetedUsersToProtect
     [string[]]$UsersToProtect = $UsersToProtect | ForEach-Object { $_.ToLower() } | select -Unique
 }
+#>
 
 if($UsersToProtect){
     write-host "Total unique UsersToProtect count: " ($UsersToProtect|measure).count 
